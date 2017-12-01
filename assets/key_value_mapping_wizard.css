@@ -1,0 +1,46 @@
+table.tl_mappingwizard {
+
+    width: 100%;
+    margin-top: .5em;
+}
+
+table.tl_mappingwizard th {
+
+    padding-bottom: .5em;
+    padding-top: .5em;
+}
+
+table.tl_mappingwizard td {
+
+    padding-right: .5em;
+}
+
+table.tl_mappingwizard th {
+
+    padding-right: .5em;
+}
+
+td.mappingwizard_type,
+th.mappingwizard_type {
+
+    width: 20%;
+}
+
+td.mappingwizard_column,
+th.mappingwizard_column {
+
+    width: 35%;
+}
+
+td.mappingwizard_head,
+th.mappingwizard_head {
+
+    width: 35%;
+}
+
+
+td.mappingwizard_continue,
+th.mappingwizard_continue {
+
+    width: 10%;
+}
