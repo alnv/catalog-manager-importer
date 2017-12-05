@@ -6,6 +6,11 @@ $GLOBALS['TL_DCA']['tl_catalog_importer'] = [
 
         'dataContainer' => 'Table',
 
+        'onload_callback' => [
+
+            [ 'CMImporter\tl_catalog_importer', 'responseJsonByStartImport' ]
+        ],
+
         'sql' => [
 
             'keys' => [
@@ -43,8 +48,8 @@ $GLOBALS['TL_DCA']['tl_catalog_importer'] = [
             'import' => [
 
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_importer']['import'],
-                'href' => '',
-                'icon' => 'edit.gif'
+                'href' => 'startImport=1',
+                'icon' => 'sync.gif'
             ],
 
             'copy' => [
