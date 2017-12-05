@@ -98,4 +98,36 @@ class tl_catalog_importer extends \Backend {
 
         return $arrReturn;
     }
+
+
+    public function responseJsonByStartImport() {
+
+        if ( !\Input::get('startImport') ) return null;
+
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_importer WHERE id = ?')->execute( \Input::get('id') );
+        $arrMapping = Toolkit::deserialize( $objImporter->mapping );
+        $strCsvFile = TL_ROOT . '/' . $objImporter->csvFile;
+
+        if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '404' , 'file not found' );
+
+        $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->delimiter );
+        $objCsvImporter->prepareData( $arrMapping, ( $objImporter->useCSVHeader ? true : false ) );
+        $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, ( $objImporter->clearTable ? true : false ) );
+        $objCsvImporter->close();
+
+        $this->sendResponse( '200' , 'file found' );
+    }
+
+    protected function sendResponse( $strState, $strMessage ) {
+
+        header('Content-type: application/json');
+
+        echo json_encode([
+
+            'state' => $strState,
+            'message' => $strMessage
+        ]);
+
+        exit;
+    }
 }
