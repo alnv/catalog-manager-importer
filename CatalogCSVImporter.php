@@ -91,7 +91,7 @@ class CatalogCSVImporter extends CatalogController {
 
             case 'text':
 
-                return $strValue;
+                return !Toolkit::isEmpty( $strValue ) ?: '';
 
                 break;
 
@@ -104,6 +104,6 @@ class CatalogCSVImporter extends CatalogController {
                 return $strValue;
         }
 
-        return !Toolkit::isEmpty( $strValue ) ?: '';
+        return '';
     }
 }
