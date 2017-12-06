@@ -5,7 +5,7 @@ namespace CMImporter;
 use CatalogManager\Toolkit as Toolkit;
 use CatalogManager\CatalogFieldBuilder as CatalogFieldBuilder;
 
-class tl_catalog_importer extends \Backend {
+class tl_catalog_imports extends \Backend {
 
 
     public function savePath( $strValue ) {
@@ -43,7 +43,7 @@ class tl_catalog_importer extends \Backend {
     public function getHeadOptions() {
 
         $arrReturn = [];
-        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_importer WHERE id = ?')->limit(1)->execute( \Input::get('id') );
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id = ?')->limit(1)->execute( \Input::get('id') );
 
         if ( !$objImporter->csvFile ) return $arrReturn;
 
@@ -58,7 +58,7 @@ class tl_catalog_importer extends \Backend {
 
     public function getDataTypes() {
 
-        return [ 'text' => 'Text', 'file' => 'Datei' ];
+        return $GLOBALS['CTLG_IMPORT_GLOBALS']['DATA_TYPES'];
     }
 
 
@@ -73,7 +73,7 @@ class tl_catalog_importer extends \Backend {
 
             if ( !$objModules->tablename ) continue;
 
-            $arrReturn[] = $objModules->tablename;
+            $arrReturn[ $objModules->tablename ] = $objModules->name ? $objModules->name : $objModules->tablename;
         }
 
         return $arrReturn;
@@ -83,7 +83,7 @@ class tl_catalog_importer extends \Backend {
     public function getColumns() {
 
         $arrReturn = [];
-        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_importer WHERE id = ?')->limit(1)->execute( \Input::get('id') );
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id = ?')->limit(1)->execute( \Input::get('id') );
 
         if ( !$objImporter->tablename ) return [];
 
@@ -104,22 +104,36 @@ class tl_catalog_importer extends \Backend {
 
         if ( !\Input::get('startImport') ) return null;
 
-        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_importer WHERE id = ?')->execute( \Input::get('id') );
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id = ?')->execute( \Input::get('id') );
         $arrMapping = Toolkit::deserialize( $objImporter->mapping );
         $strCsvFile = TL_ROOT . '/' . $objImporter->csvFile;
+
+        $arrDataTypeSettings = [
+
+            'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
+            'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
+        ];
 
         if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '404' , 'file not found' );
 
         $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->delimiter );
-        $objCsvImporter->prepareData( $arrMapping, ( $objImporter->useCSVHeader ? true : false ) );
+        $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
         $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, ( $objImporter->clearTable ? true : false ) );
         $objCsvImporter->close();
 
         $this->sendResponse( '200' , 'file found' );
     }
 
-    protected function sendResponse( $strState, $strMessage ) {
 
+    protected function sendResponse( $strState, $strMessage ) {
+        
+        $this->Database->prepare( 'UPDATE tl_catalog_imports %s WHERE id = ?' )->set([
+
+            'last_import' => time(),
+            'state' => $strState,
+
+        ])->execute( \Input::get('id') );
+        
         header('Content-type: application/json');
 
         echo json_encode([
