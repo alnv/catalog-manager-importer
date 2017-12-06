@@ -15,8 +15,11 @@ class CatalogCSVImporter extends CatalogController {
 
     public function __construct( $strCSVFilePath, $strDelimiter = '' ) {
 
-        $this->strDelimiter = $strDelimiter ? $strDelimiter : ',';
         ini_set( 'auto_detect_line_endings', true );
+
+        $this->import( 'Database' );
+
+        $this->strDelimiter = $strDelimiter ? $strDelimiter : ',';
         $this->objFile = fopen( TL_ROOT . '/' . $strCSVFilePath, 'r' );
     }
 
@@ -32,7 +35,7 @@ class CatalogCSVImporter extends CatalogController {
     }
 
 
-    public function prepareData( $arrMapping = [], $blnIgnoreHeader = false ) {
+    public function prepareData( $arrMapping, $arrDataTypeSettings, $blnIgnoreHeader = false ) {
 
         if ( !is_array( $arrMapping ) || empty( $arrMapping ) ) return null;
 
@@ -43,6 +46,7 @@ class CatalogCSVImporter extends CatalogController {
             if ( $blnIgnoreHeader && $arrPosition == 0 ) {
 
                 $arrPosition++;
+
                 continue;
             };
 
@@ -54,7 +58,7 @@ class CatalogCSVImporter extends CatalogController {
                 if ( isset( $arrMap['continue'] ) && $arrMap['continue'] ) continue;
 
                 $strFieldname = $arrMap['column'] ? $arrMap['column'] : $arrMap['head'];
-                $this->arrData[ $arrPosition ][ $strFieldname ] = $this->parseValue( $strValue, $arrMap['type'] );
+                $this->arrData[ $arrPosition ][ $strFieldname ] = $this->parseValue( $strValue, $arrMap['type'], $arrDataTypeSettings );
             }
 
             $arrPosition++;
@@ -63,8 +67,6 @@ class CatalogCSVImporter extends CatalogController {
 
 
     public function saveCsvToDatabase( $strTable, $blnClearTable = false ) {
-
-        $this->import( 'Database' );
 
         if ( $blnClearTable && ( is_array( $this->arrData ) && !empty( $this->arrData ) ) ) {
 
@@ -85,23 +87,65 @@ class CatalogCSVImporter extends CatalogController {
     }
 
 
-    protected function parseValue( $strValue, $strType ) {
+    protected function parseValue( $strValue, $strType, $arrDataTypeSettings ) {
+
+        $strType = $GLOBALS['CTLG_IMPORT_GLOBALS']['DATA_TYPES'][ $strType ];
 
         switch ( $strType ) {
 
-            case 'text':
+            case 'TEXT':
 
-                return !Toolkit::isEmpty( $strValue ) ?: '';
+                if ( Toolkit::isEmpty( $strValue ) ) return '';
+
+                return $strValue;
 
                 break;
 
-            case 'file':
+            case 'FILE':
 
-                return $strValue;
+                if ( Toolkit::isEmpty( $strValue ) ) return '';
 
-            case 'date':
+                $strPath = $arrDataTypeSettings['filesFolder'] . '/' . $strValue;
 
-                return $strValue;
+                if ( file_exists( $strPath ) ) {
+
+                    $objFile = \FilesModel::findByPath( $strPath );
+
+                    if ( $objFile === null ) {
+
+                        \System::log( sprintf( 'File "%s" do not exist in tl_files table', $strPath ), __METHOD__, TL_GENERAL );
+
+                        return '';
+                    }
+
+                    return $objFile->uuid;
+                }
+
+                \System::log( sprintf( 'File "%s" do not exist', $strPath ), __METHOD__, TL_GENERAL );
+
+                return '';
+
+                break;
+
+            case 'DATE':
+
+                if ( Toolkit::isEmpty( $strValue ) ) return '';
+
+                try {
+
+                    $objDate = new \Date( $strValue, $arrDataTypeSettings['datimFormat'] );
+
+                    return $objDate->tstamp;
+                }
+
+                catch ( \Exception $objError ) {
+
+                    \System::log( $objError->getMessage(), __METHOD__, TL_GENERAL );
+                }
+
+                return '';
+
+                break;
         }
 
         return '';
