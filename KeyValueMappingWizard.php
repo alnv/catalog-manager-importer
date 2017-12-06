@@ -47,14 +47,16 @@ class KeyValueMappingWizard extends \Widget {
 
         $intTabindex = \Cache::get('tabindex');
 
+        if ( !count( $this->arrHeadOptions ) ) return '';
+
         return
             '<table  class="tl_mappingwizard" id="ctrl_'.$this->strId.'" data-tabindex="'. $intTabindex .'">'.
                 '<thead>'.
                     '<tr>'.
-                        '<th class="mappingwizard_head">'. $GLOBALS['TL_LANG']['tl_catalog_importer']['mappingHeader']['head'] .'</th>'.
-                        '<th class="mappingwizard_column">'. $GLOBALS['TL_LANG']['tl_catalog_importer']['mappingHeader']['column'] .'</th>'.
-                        '<th class="mappingwizard_type">'. $GLOBALS['TL_LANG']['tl_catalog_importer']['mappingHeader']['type'] .'</th>'.
-                        '<th class="mappingwizard_continue">'. $GLOBALS['TL_LANG']['tl_catalog_importer']['mappingHeader']['continue'] .'</th>'.
+                        '<th class="mappingwizard_head">'. $GLOBALS['TL_LANG']['tl_catalog_imports']['mappingHeader']['head'] .'</th>'.
+                        '<th class="mappingwizard_column">'. $GLOBALS['TL_LANG']['tl_catalog_imports']['mappingHeader']['column'] .'</th>'.
+                        '<th class="mappingwizard_type">'. $GLOBALS['TL_LANG']['tl_catalog_imports']['mappingHeader']['type'] .'</th>'.
+                        '<th class="mappingwizard_continue">'. $GLOBALS['TL_LANG']['tl_catalog_imports']['mappingHeader']['continue'] .'</th>'.
                     '</tr>'.
                 '</thead>'.
                 '<tbody>'. $this->parseCSVMap( $intTabindex ) .'</tbody>'.
