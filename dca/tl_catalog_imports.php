@@ -49,7 +49,8 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
 
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['import'],
                 'href' => 'startImport=1',
-                'icon' => 'sync.gif'
+                'icon' => 'sync.gif',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_catalog_imports']['importConfirm'] . '\'))return false;Backend.getScrollOffset()"'
             ],
 
             'copy' => [
@@ -193,8 +194,9 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
                 'includeBlankOption' => true
             ],
 
+            'reference' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['stateMessages'],
             'options' => $GLOBALS['CTLG_IMPORT_GLOBALS']['STATES'],
-            
+
             'exclude' => true,
             'sql' => "varchar(12) NOT NULL default ''"
         ],
