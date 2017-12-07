@@ -114,34 +114,26 @@ class tl_catalog_imports extends \Backend {
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
         ];
 
-        if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '404' , 'file not found' );
+        if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '500' );
 
         $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->delimiter );
         $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
         $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, ( $objImporter->clearTable ? true : false ) );
         $objCsvImporter->close();
 
-        $this->sendResponse( '200' , 'file found' );
+        $this->sendResponse( '200' );
     }
 
 
-    protected function sendResponse( $strState, $strMessage ) {
+    protected function sendResponse( $strState ) {
         
-        $this->Database->prepare( 'UPDATE tl_catalog_imports %s WHERE id = ?' )->set([
+        $this->Database->prepare( 'UPDATE tl_catalog_imports %s WHERE id=?' )->set([
 
             'last_import' => time(),
             'state' => $strState,
 
         ])->execute( \Input::get('id') );
-        
-        header('Content-type: application/json');
 
-        echo json_encode([
-
-            'state' => $strState,
-            'message' => $strMessage
-        ]);
-
-        exit;
+        $this->redirect( preg_replace( '/&(amp;)?startImport=[^&]*/i', '', preg_replace( '/&(amp;)?' . preg_quote( "1", '/' ) . '=[^&]*/i', '', \Environment::get('request') ) ) );
     }
 }
