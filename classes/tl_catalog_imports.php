@@ -110,13 +110,15 @@ class tl_catalog_imports extends \Backend {
 
         $arrDataTypeSettings = [
 
+            'useAlias' => $objImporter->useAlias ? true : false,
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
+            'titleTpl' => \StringUtil::decodeEntities( $objImporter->titleTpl ) ?: '',
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
         ];
 
         if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '500' );
 
-        $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->delimiter );
+        $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->tablename, $objImporter->delimiter );
         $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
         $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, ( $objImporter->clearTable ? true : false ) );
         $objCsvImporter->close();
