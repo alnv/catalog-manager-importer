@@ -97,7 +97,7 @@ class CatalogCSVImporter extends CatalogController {
 
                 if ( Toolkit::isEmpty( $strValue ) ) return '';
 
-                return $strValue;
+                return utf8_encode( $strValue );
 
                 break;
 
