@@ -90,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
 
     'palettes' => [
 
-        'default' => '{general_settings},name,tablename,state,last_import;{csv_settings},csvFile,delimiter,clearTable,useCSVHeader,mapping;{data_type_settings},filesFolder,datimFormat;'
+        'default' => '{general_settings},name,tablename,state,last_import;{csv_settings},csvFile,delimiter,clearTable,useCSVHeader,mapping;{data_type_settings},filesFolder,datimFormat;{field_settings},titleTpl,useAlias;'
     ],
 
     'fields' => [
@@ -300,5 +300,33 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
             'exclude' => true,
             'sql' => "varchar(255) NOT NULL default ''"
         ],
+
+        'titleTpl' => [
+
+            'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['titleTpl'],
+            'inputType' => 'text',
+
+            'eval' => [
+
+                'tl_class' => 'w50'
+            ],
+
+            'exclude' => true,
+            'sql' => "varchar(255) NOT NULL default ''"
+        ],
+
+        'useAlias' => [
+
+            'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['useAlias'],
+            'inputType' => 'checkbox',
+
+            'eval' => [
+
+                'tl_class' => 'w50 m12'
+            ],
+
+            'exclude' => true,
+            'sql' => "char(1) NOT NULL default ''"
+        ]
     ]
 ];
