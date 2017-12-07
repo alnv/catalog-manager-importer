@@ -3,6 +3,7 @@
 namespace CMImporter;
 
 use CatalogManager\Toolkit as Toolkit;
+use CatalogManager\DcCallbacks as DcCallbacks;
 use CatalogManager\CatalogController as CatalogController;
 
 class CatalogCSVImporter extends CatalogController {
@@ -11,14 +12,16 @@ class CatalogCSVImporter extends CatalogController {
     protected $arrData = [];
     protected $strDelimiter;
     protected $objFile = null;
+    protected $strTablename = '';
 
 
-    public function __construct( $strCSVFilePath, $strDelimiter = '' ) {
+    public function __construct( $strCSVFilePath, $strTablename, $strDelimiter = '' ) {
 
         ini_set( 'auto_detect_line_endings', true );
 
         $this->import( 'Database' );
 
+        $this->strTablename = $strTablename;
         $this->strDelimiter = $strDelimiter ? $strDelimiter : ',';
         $this->objFile = fopen( TL_ROOT . '/' . $strCSVFilePath, 'r' );
     }
@@ -40,13 +43,13 @@ class CatalogCSVImporter extends CatalogController {
         if ( !is_array( $arrMapping ) || empty( $arrMapping ) ) return null;
 
         $arrPosition = 0;
+        $objCallback = new DcCallbacks();
 
         while ( ( $arrData = fgetcsv( $this->objFile, 0, $this->strDelimiter ) ) !== FALSE ) {
 
-            if ( $blnIgnoreHeader && $arrPosition == 0 ) {
+            if ( $blnIgnoreHeader ) {
 
-                $arrPosition++;
-
+                $blnIgnoreHeader = false;
                 continue;
             };
 
@@ -62,6 +65,19 @@ class CatalogCSVImporter extends CatalogController {
             }
 
             $arrPosition++;
+        }
+
+        for ( $intIndex = 0; count( $this->arrData ) > $intIndex; $intIndex++ ) {
+
+            if ( !Toolkit::isEmpty( $arrDataTypeSettings['titleTpl'] ) ) {
+
+                $this->arrData[ $intIndex ]['title'] = \StringUtil::parseSimpleTokens( $arrDataTypeSettings['titleTpl'], $this->arrData[ $intIndex ]  );
+            }
+
+            if ( !Toolkit::isEmpty( $this->arrData[ $intIndex ]['title'] ) && $arrDataTypeSettings['useAlias'] ) {
+
+                $this->arrData[ $intIndex ]['alias'] = $objCallback->generateFEAlias( '', $this->arrData[ $intIndex ]['title'], $this->strTablename, '', null );
+            }
         }
     }
 
