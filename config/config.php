@@ -1,6 +1,16 @@
 <?php
 
-$GLOBALS['BE_MOD']['system']['catalog-manager']['tables'][] = 'tl_catalog_imports';
+$GLOBALS['BE_MOD']['catalog-manager-extensions']['catalog-manager-importer'] = [
+
+    'name' => 'catalog-manager-importer',
+    'icon' => 'system/modules/catalog-manager-importer/assets/icon.svg',
+
+    'tables' => [
+
+        'tl_catalog_imports'
+    ]
+];
+
 $GLOBALS['BE_FFL']['keyValueMapping'] = 'CMImporter\KeyValueMappingWizard';
 
 if ( TL_MODE == 'BE' ) {
