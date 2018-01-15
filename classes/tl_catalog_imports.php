@@ -116,7 +116,7 @@ class tl_catalog_imports extends \Backend {
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
         ];
 
-        if ( !file_exists( $strCsvFile ) ) $this->sendResponse( '500' );
+        if ( !file_exists( $strCsvFile ) || !$this->Database->tableExists( $objImporter->tablename ) ) $this->sendResponse( '500' );
 
         $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->tablename, $objImporter->delimiter );
         $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
