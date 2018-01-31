@@ -45,6 +45,11 @@ class CatalogCSVImporter extends CatalogController {
         $arrPosition = 0;
         $objCallback = new DcCallbacks();
 
+        //
+        $arrBindColumns = [ 'messe', 'messen', 'markt', 'ausstellung', 'seminar' ];
+        $strBindColumn = 'event_type';
+        //
+
         while ( ( $arrData = fgetcsv( $this->objFile, 0, $this->strDelimiter ) ) !== FALSE ) {
 
             if ( $blnIgnoreHeader ) {
@@ -53,11 +58,25 @@ class CatalogCSVImporter extends CatalogController {
                 continue;
             };
 
+            //
+            $arrBindValues = [];
+            //
+
             $this->arrData[ $arrPosition ] = [];
 
             foreach ( $arrData as $intIndex => $strValue ) {
 
                 $arrMap = $arrMapping[ $intIndex ];
+
+                //
+                if ( in_array( $arrMap['head'], $arrBindColumns ) && $strValue == 'Ja' && $this->strTablename == 'ctlg_events' ) {
+
+                    $arrBindValues[] = $arrMap['head'];
+                    $this->arrData[ $arrPosition ][ $strBindColumn ] = implode( ',', $arrBindValues );
+                    continue;
+                }
+                //
+
                 if ( isset( $arrMap['continue'] ) && $arrMap['continue'] ) continue;
 
                 $strFieldname = $arrMap['column'] ? $arrMap['column'] : $arrMap['head'];
@@ -78,6 +97,8 @@ class CatalogCSVImporter extends CatalogController {
 
                 $this->arrData[ $intIndex ]['alias'] = $objCallback->generateFEAlias( '', $this->arrData[ $intIndex ]['title'], $this->strTablename, '', null );
             }
+
+            $this->arrData[ $intIndex ]['tstamp'] = time();
         }
     }
 
@@ -107,13 +128,19 @@ class CatalogCSVImporter extends CatalogController {
 
         $strType = $GLOBALS['CTLG_IMPORT_GLOBALS']['DATA_TYPES'][ $strType ];
 
+        //
+        if ( $strValue == 'Ja' ) $strValue = '1';
+        if ( $strValue == 'Nein' ) $strValue = '';
+        if ( $strValue == 'NULL' ) $strValue = ( $strType == 'DATE' ? 0 : '' );
+        //
+
         switch ( $strType ) {
 
             case 'TEXT':
 
                 if ( Toolkit::isEmpty( $strValue ) ) return '';
 
-                return utf8_encode( $strValue );
+                return $strValue;
 
                 break;
 
@@ -145,7 +172,7 @@ class CatalogCSVImporter extends CatalogController {
 
             case 'DATE':
 
-                if ( Toolkit::isEmpty( $strValue ) ) return '';
+                if ( Toolkit::isEmpty( $strValue ) ) return 0;
 
                 try {
 
@@ -159,7 +186,7 @@ class CatalogCSVImporter extends CatalogController {
                     \System::log( $objError->getMessage(), __METHOD__, TL_GENERAL );
                 }
 
-                return '';
+                return 0;
 
                 break;
         }
