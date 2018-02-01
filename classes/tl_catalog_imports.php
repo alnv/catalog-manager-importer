@@ -111,6 +111,7 @@ class tl_catalog_imports extends \Backend {
         $arrDataTypeSettings = [
 
             'useAlias' => $objImporter->useAlias ? true : false,
+            'clearTable' => $objImporter->clearTable ? true : false,
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
             'titleTpl' => \StringUtil::decodeEntities( $objImporter->titleTpl ) ?: '',
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
@@ -120,7 +121,7 @@ class tl_catalog_imports extends \Backend {
 
         $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->tablename, $objImporter->delimiter );
         $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
-        $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, ( $objImporter->clearTable ? true : false ) );
+        $objCsvImporter->saveCsvToDatabase( $objImporter->tablename );
         $objCsvImporter->close();
 
         $this->sendResponse( '200' );
