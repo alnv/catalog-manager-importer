@@ -26,7 +26,8 @@ $GLOBALS['CTLG_IMPORT_GLOBALS']['DATA_TYPES'] = [
 
     'TEXT',
     'DATE',
-    'FILE'
+    'FILE',
+    'INT'
 ];
 
 $GLOBALS['CTLG_IMPORT_GLOBALS']['STATES'] = [
