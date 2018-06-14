@@ -47,7 +47,7 @@ class tl_catalog_imports extends \Backend {
 
         if ( !$objImporter->csvFile ) return $arrReturn;
 
-        $objCSVImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->delimiter );
+        $objCSVImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->tablename, $objImporter->delimiter );
         $arrReturn = $objCSVImporter->readAndGetCSVHeader( $objImporter->useCSVHeader ? true : false );
 
         $objCSVImporter->close();
