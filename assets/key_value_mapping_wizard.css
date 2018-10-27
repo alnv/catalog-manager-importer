@@ -4,6 +4,11 @@ table.tl_mappingwizard {
     margin-top: .5em;
 }
 
+table.tl_mappingwizard .tl_select {
+
+    width: 100%;
+}
+
 table.tl_mappingwizard th {
 
     padding-bottom: .5em;
@@ -23,18 +28,21 @@ table.tl_mappingwizard th {
 td.mappingwizard_type,
 th.mappingwizard_type {
 
+    position: relative;
     width: 20%;
 }
 
 td.mappingwizard_column,
 th.mappingwizard_column {
 
+    position: relative;
     width: 35%;
 }
 
 td.mappingwizard_head,
 th.mappingwizard_head {
 
+    position: relative;
     width: 35%;
 }
 
@@ -42,5 +50,6 @@ th.mappingwizard_head {
 td.mappingwizard_continue,
 th.mappingwizard_continue {
 
+    position: relative;
     width: 10%;
 }

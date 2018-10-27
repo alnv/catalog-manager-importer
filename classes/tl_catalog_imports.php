@@ -26,14 +26,14 @@ class tl_catalog_imports extends \Backend {
 
     public function convertToUUID( $strValue ) {
 
-        if ( Toolkit::isEmpty( $strValue ) ) {
+        if ( Toolkit::isEmpty( $strValue ) || !is_string( $strValue ) ) {
 
             return '';
         }
 
         if ( !Toolkit::isEmpty( $strValue ) ) {
 
-            return \FilesModel::findByPath($strValue)->uuid;
+            return \FilesModel::findByPath( $strValue )->uuid;
         }
 
         return '';
