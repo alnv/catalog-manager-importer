@@ -121,7 +121,7 @@ class tl_catalog_imports extends \Backend {
 
         $objCsvImporter = new CatalogCSVImporter( $objImporter->csvFile, $objImporter->tablename, $objImporter->delimiter );
         $objCsvImporter->prepareData( $arrMapping, $arrDataTypeSettings, ( $objImporter->useCSVHeader ? true : false ) );
-        $objCsvImporter->saveCsvToDatabase( $objImporter->tablename );
+        $objCsvImporter->saveCsvToDatabase( $objImporter->tablename, $arrDataTypeSettings );
         $objCsvImporter->close();
 
         $this->sendResponse( '200' );
