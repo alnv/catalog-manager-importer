@@ -18,6 +18,7 @@ $GLOBALS['TL_LANG']['tl_catalog_imports']['importConfirm'] = 'Soll der Importer 
 $GLOBALS['TL_LANG']['tl_catalog_imports']['tablename'] = [ 'Tabelle', 'Bitte wählen Sie eine Tabelle aus.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['csvFile'] = [ 'CSV-Datei', 'Bitte wählen Sie eine CSV-Datei aus.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['state'] = [ 'Status', 'Hier steht der Status des letzten Importes.' ];
+$GLOBALS['TL_LANG']['tl_catalog_imports']['deleteQuery'] = [ 'Abfrage', 'Hier können Sie die Löschabfrage eingrenzen.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['useAlias'] = [ 'Alias verwenden', 'Alias beim Import automatisch generieren.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['last_import'] = [ 'Letzter Import', 'Hier steht das Datum des letzten Importes.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['name'] = [ 'Bezeichnung', 'Bitte geben Sie eine Bezeichnung des CSV Importer ein.' ];

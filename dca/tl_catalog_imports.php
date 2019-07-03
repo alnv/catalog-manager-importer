@@ -90,7 +90,13 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
 
     'palettes' => [
 
-        'default' => '{general_settings},name,tablename,state,last_import;{csv_settings},csvFile,delimiter,clearTable,useCSVHeader,mapping;{data_type_settings},filesFolder,datimFormat;{field_settings},titleTpl,useAlias;'
+        '__selector__' => [ 'clearTable' ],
+        'default' => '{general_settings},name,tablename,state,last_import;{csv_settings},csvFile,delimiter,useCSVHeader,mapping,clearTable;{data_type_settings},filesFolder,datimFormat;{field_settings},titleTpl,useAlias;'
+    ],
+
+    'subpalettes' => [
+
+        'clearTable' => 'deleteQuery'
     ],
 
     'fields' => [
@@ -155,7 +161,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
                 'files' => true,
                 'doNotCopy' => true,
                 'mandatory' => true,
-                'tl_class' => 'w50',
+                'tl_class' => 'clr',
                 'fieldType' => 'radio',
                 'extensions' => 'csv,txt'
             ],
@@ -174,7 +180,8 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
 
             'eval' => [
 
-                'tl_class' => 'w50 m12'
+                'tl_class' => 'clr',
+                'submitOnChange' => true
             ],
             
             'exclude' => true,
@@ -327,6 +334,22 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
 
             'exclude' => true,
             'sql' => "char(1) NOT NULL default ''"
+        ],
+
+        'deleteQuery' => [
+
+            'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['deleteQuery'],
+            'inputType' => 'catalogTaxonomyWizard',
+
+            'eval' => [
+
+                'dcTable' => 'tl_catalog_imports',
+                'taxonomyTable' => [ 'CMImporter\tl_catalog_imports', 'getQueryTable' ],
+                'taxonomyEntities' => [ 'CMImporter\tl_catalog_imports', 'getQueryFields' ]
+            ],
+
+            'exclude' => true,
+            'sql' => "blob NULL"
         ]
     ]
 ];

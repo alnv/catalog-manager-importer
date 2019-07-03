@@ -114,6 +114,7 @@ class tl_catalog_imports extends \Backend {
             'clearTable' => $objImporter->clearTable ? true : false,
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
             'titleTpl' => \StringUtil::decodeEntities( $objImporter->titleTpl ) ?: '',
+            'deleteQuery' => \StringUtil::deserialize( $objImporter->deleteQuery, true ),
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
         ];
 
@@ -138,5 +139,48 @@ class tl_catalog_imports extends \Backend {
         ])->execute( \Input::get('id') );
 
         $this->redirect( preg_replace( '/&(amp;)?startImport=[^&]*/i', '', preg_replace( '/&(amp;)?' . preg_quote( "1", '/' ) . '=[^&]*/i', '', \Environment::get('request') ) ) );
+    }
+
+
+    public function getQueryTable( \DataContainer $dc ) {
+
+        $strTable = $dc->activeRecord->tablename ? $dc->activeRecord->tablename : '';
+
+        if ( !$strTable || !$this->Database->tableExists( $strTable ) ) {
+
+            return '';
+        }
+
+        return $strTable;
+    }
+
+
+    public function getQueryFields( \DataContainer $dc, $strTablename, $arrForbiddenTypes = null ) {
+
+        $arrReturn = [];
+
+        if ( !$strTablename ) return $arrReturn;
+        if ( !$this->Database->tableExists( $strTablename ) ) return $arrReturn;
+
+        if ( is_null( $arrForbiddenTypes ) || !is_array( $arrForbiddenTypes ) ) {
+
+            $arrForbiddenTypes = [ 'upload' ];
+        }
+
+        $objCatalogFieldBuilder = new CatalogFieldBuilder();
+        $objCatalogFieldBuilder->initialize( $strTablename );
+        $arrFields = $objCatalogFieldBuilder->getCatalogFields( true, null );
+
+        foreach ( $arrFields as $strFieldname => $arrField ) {
+
+            if ( !$this->Database->fieldExists( $strFieldname, $strTablename ) ) continue;
+            if ( in_array( $arrField['type'], Toolkit::excludeFromDc() ) ) continue;
+            if ( $arrField['type'] == 'textarea' && $arrField['rte'] ) continue;
+            if ( in_array( $arrField['type'], $arrForbiddenTypes ) ) continue;
+
+            $arrReturn[ $strFieldname ] = $arrField['_dcFormat'];
+        }
+
+        return $arrReturn;
     }
 }

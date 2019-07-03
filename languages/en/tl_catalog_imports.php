@@ -20,6 +20,7 @@ $GLOBALS['TL_LANG']['tl_catalog_imports']['csvFile'] = [ 'CSV file', 'Please sel
 $GLOBALS['TL_LANG']['tl_catalog_imports']['tablename'] = [ 'Table', 'Please select your destination table.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['state'] = [ 'Status', 'Here you can see the last import status.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['last_import'] = [ 'Last import', 'Here you can see last import.' ];
+$GLOBALS['TL_LANG']['tl_catalog_imports']['deleteQuery'] = [ 'Query', 'Here you can limit the deletion query.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['useAlias'] = [ 'Use alias', 'Generate alias automatically on import.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['titleTpl'] = [ 'Clear name', 'Here you can define the value for the clear name.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['datimFormat'] = [ 'Date format', 'Please enter the format used in the CSV file.' ];
