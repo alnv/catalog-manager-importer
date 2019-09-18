@@ -114,7 +114,7 @@ class tl_catalog_imports extends \Backend {
             'clearTable' => $objImporter->clearTable ? true : false,
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
             'titleTpl' => \StringUtil::decodeEntities( $objImporter->titleTpl ) ?: '',
-            'deleteQuery' => \StringUtil::deserialize( $objImporter->deleteQuery, true ),
+            'deleteQuery' => deserialize( $objImporter->deleteQuery, true ),
             'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
         ];
 
