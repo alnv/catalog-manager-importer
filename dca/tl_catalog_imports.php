@@ -223,7 +223,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
             'sql' => "varchar(255) NOT NULL default ''"
         ],
         'titleField' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['titleTpl'],
+            'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['titleField'],
             'inputType' => 'text',
             'eval' => [
                 'tl_class' => 'w50'

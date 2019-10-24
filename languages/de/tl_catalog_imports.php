@@ -24,6 +24,7 @@ $GLOBALS['TL_LANG']['tl_catalog_imports']['last_import'] = [ 'Letzter Import', '
 $GLOBALS['TL_LANG']['tl_catalog_imports']['name'] = [ 'Bezeichnung', 'Bitte geben Sie eine Bezeichnung des CSV Importer ein.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['mapping'] = [ 'Mapping', 'Hier können Sie die CSV Kopfzeilen individuell zuweisen und einstellen.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['clearTable'] = [ 'Tabelle leeren', 'Vor dem Import werden alle Datensätze in der Tabelle gelöscht.' ];
+$GLOBALS['TL_LANG']['tl_catalog_imports']['titleField'] = [ 'Titel Feld', 'Bitte geben Sie das Feld ein, aus dem ein Alias generiert werden soll.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['datimFormat'] = [ 'Datum Format', 'Bitte geben Sie, dass in der CSV Datei verwendetes Datum Format ein.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['titleTpl'] = [ 'Eindeutige Bezeichnung', 'Hier können Sie den Wert für die eindeutige Bezeichnung definieren.' ];
 $GLOBALS['TL_LANG']['tl_catalog_imports']['delimiter'] = [ 'Trennzeichen', 'Hier können Sie ein Trennzeichen definieren. Standardmässig wird ein Komma verwendet.' ];
