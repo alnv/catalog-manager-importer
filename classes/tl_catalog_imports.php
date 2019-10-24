@@ -110,6 +110,7 @@ class tl_catalog_imports extends \Backend {
 
         $arrDataTypeSettings = [
 
+            'titleField' => $objImporter->titleField ?: 'title',
             'useAlias' => $objImporter->useAlias ? true : false,
             'clearTable' => $objImporter->clearTable ? true : false,
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
