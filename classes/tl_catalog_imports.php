@@ -93,7 +93,19 @@ class tl_catalog_imports extends \Backend {
 
         foreach ( $arrFields as $strFieldname => $arrField ) {
 
-            $arrReturn[ $strFieldname ] = $arrField['_dcFormat']['label'][0];
+            $strLabel = '';
+
+            if ( isset( $arrField['_dcFormat']['label'] ) && $arrField['_dcFormat']['label'][0] ) {
+
+                $strLabel = $arrField['_dcFormat']['label'][0];
+            }
+
+            if ( !$strLabel ) {
+
+                $strLabel = $strFieldname;
+            }
+
+            $arrReturn[ $strFieldname ] = $strLabel;
         }
 
         return $arrReturn;
