@@ -116,7 +116,7 @@ class tl_catalog_imports extends \Backend {
             'datimFormat' => $objImporter->datimFormat ?: \Config::get('datimFormat'),
             'titleTpl' => \StringUtil::decodeEntities( $objImporter->titleTpl ) ?: '',
             'deleteQuery' => deserialize( $objImporter->deleteQuery, true ),
-            'filesFolder' => TL_ROOT . '/'. $objImporter->filesFolder ?: TL_ROOT . '/'. 'files'
+            'filesFolder' => $objImporter->filesFolder ? TL_ROOT . '/'. $objImporter->filesFolder : ''
         ];
 
         if ( !file_exists( $strCsvFile ) || !$this->Database->tableExists( $objImporter->tablename ) ) $this->sendResponse( '500' );
