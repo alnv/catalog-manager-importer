@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['import'],
                 'href' => 'startImport=1',
                 'icon' => 'sync.gif',
-                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_catalog_imports']['importConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+                'attributes' => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['tl_catalog_imports']['importConfirm'] ?? '') . '\'))return false;Backend.getScrollOffset()"'
             ],
             'copy' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['copy'],
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['delete'],
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+                'attributes' => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? '') . '\'))return false;Backend.getScrollOffset()"'
             ],
             'show' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['show'],
@@ -140,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_catalog_imports'] = [
                 'includeBlankOption' => true
             ],
             'reference' => &$GLOBALS['TL_LANG']['tl_catalog_imports']['stateMessages'],
-            'options' => $GLOBALS['CTLG_IMPORT_GLOBALS']['STATES'],
+            'options' => &$GLOBALS['CTLG_IMPORT_GLOBALS']['STATES'],
             'exclude' => true,
             'sql' => "varchar(12) NOT NULL default ''"
         ],
