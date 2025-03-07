@@ -20,7 +20,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
         return [
             BundleConfig::create(AlnvCatalogManagerImporterBundle::class)
                 ->setLoadAfter([ContaoCoreBundle::class, AlnvCatalogManagerBundle::class])
-                ->setReplace(['catalog-manager-mailer-bundle']),
+                ->setReplace(['catalog-manager-importer-bundle']),
         ];
     }
 
