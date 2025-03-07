@@ -19,6 +19,7 @@
   },
   "require": {
     "php":">=8.0",
+    "contao/core-bundle": "~5.3",
     "alnv/catalog-manager": "^2.0"
   },
   "autoload": {
