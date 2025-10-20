@@ -70,7 +70,7 @@ class tl_catalog_imports extends Backend
     {
 
         $arrReturn = [];
-        $objModules = $this->Database->prepare('SELECT * FROM tl_catalog WHERE tstamp > 0')->execute(Input::get('id'));
+        $objModules = $this->Database->prepare('SELECT * FROM tl_catalog WHERE tstamp>0')->execute();
 
         if (!$objModules->numRows) return $arrReturn;
 
@@ -86,7 +86,7 @@ class tl_catalog_imports extends Backend
     {
 
         $arrReturn = [];
-        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id = ?')->limit(1)->execute(Input::get('id'));
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id=?')->limit(1)->execute(Input::get('id'));
 
         if (!$objImporter->tablename) return [];
 
@@ -118,7 +118,7 @@ class tl_catalog_imports extends Backend
         if (!Input::get('startImport')) return null;
 
         $strRootDir = System::getContainer()->getParameter('kernel.project_dir');
-        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id = ?')->execute(Input::get('id'));
+        $objImporter = $this->Database->prepare('SELECT * FROM tl_catalog_imports WHERE id=?')->execute(Input::get('id'));
         $arrMapping = Toolkit::deserialize($objImporter->mapping);
         $strCsvFile = $strRootDir . '/' . $objImporter->csvFile;
 
